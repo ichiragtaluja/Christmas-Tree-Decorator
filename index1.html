@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>ZIM - Code Creativity</title>
+
+    <!-- zimjs.com - JavaScript Canvas Framework -->
+    <script type="module">
+      import zim from "https://zimjs.org/cdn/015/zim";
+
+      // See Docs under Frame for FIT, FILL, FULL, and TAG
+
+      let assets = [
+        "background.png",
+        "ball.png",
+        "candy-cane.png",
+        "candy.png",
+        "christmas-balls.png",
+        "christmas-bell.png",
+        "christmas-cap.png",
+        "christmas-wreath.png",
+        "decoration.png",
+        "hohoho.png",
+        "lights.png",
+        "mistletoe.png",
+        "ornament.png",
+        "present.png",
+        "santa.png",
+        "star.png",
+        "tree.png",
+      ];
+      let path = "assets/";
+
+      new Frame(FIT, 1024, 768, light, dark, ready, assets, path);
+      function ready() {
+        // given F (Frame), S (Stage), W (width), H (height)
+
+        // put code here
+        let background = new Pic("background.png").center().bot();
+
+        let ornaments = assets.slice(1, -1);
+
+        // const treeContainer = new Container(300, 400).pos(50, 50).outline();
+
+        // const ornamentsContainer = new Container(100, 100)
+        //   .pos(W - 200, 100)
+        //   .outline();
+
+        const treeBlob = new Blob({
+          points: [
+            [-7, -149.4, 0, 0, -15.1, 33.1, 12.4, 30.9, "free"],
+            [48.5, -73.4, 0, 0, 0, 0, 0, 0, "none"],
+            [19.8, -75.2, 0, 0, 17.6, 6.4, 12, 30.7, "free"],
+            [81.6, -5.4, 0, 0, 0, 0, 0, 0, "none"],
+            [40, -11.2, 0, 0, 21.2, 7.8, 10.1, 32.2, "free"],
+            [112, 57.8, 0, 0, 0, 0, 0, 0, "none"],
+            [57.5, 56.2, 0, 0, 31.5, 7.5, 20.5, 38.9, "free"],
+            [133.4, 119.6, 0, 0, 0, 0, 0, 0, "mirror"],
+            [18.2, 120.8, 0, 0, 39.9, 15.4, -0.9, 0.9, "free"],
+            [19.5, 153.9, 0, 0, 0, 0, 0, 0, "none"],
+            [-25.6, 153.7, 0, 0, 0, 0, 0, 0, "none"],
+            [-24.4, 123, 0, 0, 0, -0.9, -40.8, 10.9, "free"],
+            [-132.7, 122, 0, 0, 0, 0, 0, 0, "mirror"],
+            [-67.2, 57.5, 0, 0, -24.6, 44.4, -35.2, 10.9, "free"],
+            [-122.7, 57.8, 0, 0, 0, 0, 0, 0, "none"],
+            [-50.7, -8.3, 0, 0, -12.7, 36.8, -20.6, 9.7, "free"],
+            [-102.1, -2.7, 0, 0, 0, 0, 0, 0, "none"],
+            [-33.1, -76.5, 0, 0, -14.5, 32.4, -15.6, 7.8, "free"],
+            [-67.2, -69.3, 0, 0, 0, 0, 0, 0, "none"],
+          ],
+          interactive: false,
+          showControles: false,
+          onTop: false,
+        })
+          .sca(1.4)
+          .centerReg();
+
+        const tree = new Pic("tree.png")
+          .top()
+          .sca(0.12)
+          .centerReg()
+          .loc(treeBlob)
+          .outline();
+
+        let pics = [];
+
+        loop(ornaments, (ornament, i) => {
+          let pic = new Pic(ornaments).sca(0.12).drag();
+          pics.push(pic);
+          // label.text = shuffledNumbers[i];
+          // label.alpha = 0;
+        });
+
+        let ornamentsContainer = new Tile({
+          obj: pics,
+          unique: true,
+          cols: 3,
+          rows: 4,
+          spacingH: 30,
+          spacingV: 30,
+        })
+          .pos(W - 330, 100)
+          .outline();
+
+        // loop(ornamentsContainer, (ornament, i) => {
+        //   ornament.drag = true;
+        // });
+
+        loop(ornamentsContainer, (ornament, i) => {
+          // zogr(i, ornament);
+          // ornament.on("mousedown", (e) => {
+          //   zogr(e.target);
+          //   e.target.drag();
+          //   S.update();
+          ornament.xCoordinate = ornament.x;
+          ornament.yCoordinate = ornament.y;
+        });
+        // });
+
+        // ornamentsContainer.tap((e) => {
+        //   e.target.on("pressup", (i) => {
+        //     zogr(i.target);
+
+        //     if (i.target.hitTestBounds(treeBlob)) {
+        //       zogr("touched");
+        //       S.update();
+        //     }
+        //     // e.target.drag();
+        //   });
+        // });
+
+        ornamentsContainer.on("pressup", (e) => {
+          zogr(e.target);
+
+          if (e.target.hitTestBounds(treeBlob)) {
+            zogr("touched");
+            e.target.loc(e.target.x, e.target.y).top().ord(2);
+            S.update();
+          } else {
+            e.target.pos(e.target.xCoordinate, e.target.yCoordinate);
+            S.update();
+          }
+          // e.target.drag();
+        });
+
+        //   .loc(tree);
+
+        // const tree = new Pic("tree.png").top().sca(0.1).centerReg().outline();
+      } // end ready
+    </script>
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+  </head>
+  <body></body>
+</html>
+
+<!-- // Ensure ZIM is included in your HTML
+zim.ready(() => {
+    // Setup the ZIM Frame
+    const frame = new zim.Frame("fit", 800, 600);
+    frame.on("ready", () => {
+        const stage = frame.stage;
+        const stageW = frame.width;
+        const stageH = frame.height;
+
+        // Create a Christmas Tree
+        const tree = new zim.Rectangle(200, 300, "green").center(stage);
+
+        // Example Decoration
+        const star = new zim.Circle(20, "gold").pos(100, 100);
+        star.drag(); // Making the star draggable
+
+        // Drag and Drop Logic for the star
+        star.on("pressup", () => {
+            if (star.hitTestRect(tree)) {
+                // If the star is dropped on the tree, place it on the tree
+                star.loc(tree.x, tree.y - tree.height / 2);
+            } else {
+                // If not, return it to its original position
+                star.animate({ x: 100, y: 100 });
+            }
+        });
+
+        // Additional decorations and functionalities to be added similarly
+
+        // Save and Share buttons
+        const saveBtn = new zim.Button(150, 50, "Save").pos(50, 550, stage);
+        const shareBtn = new zim.Button(150, 50, "Share").pos(600, 550, stage);
+
+        // Event listeners for buttons...
+    });
+}); -->
+
+<!-- ////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+<!-- Sample Code Snippets
+Setting Up the Canvas
+
+const frame = new zim.Frame("fit", 800, 600, "white");
+frame.on("ready", () => {
+    const stage = frame.stage;
+    let tree; // Placeholder for the tree
+    let decorations = []; // Array to hold decorations
+
+    // Create and add the tree
+    // ...
+
+    // Create decorations
+    // ...
+
+    // Add UI controls
+    // ...
+
+    // Implement saving and sharing functionalities
+    // ...
+}); -->
+
+<!-- ////////////////////////////////////////////////////////////////////////////////////////////// -->
+<!-- 
+Creating the Tree
+
+tree = new zim.Rectangle(200, 300, "green").center(stage);
+// Or, if using an image
+// tree = new zim.Bitmap("path/to/tree/image.png").sca(0.5).center(stage);
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+Creating a Decorative Item
+
+let star = new zim.Circle(20, "gold").pos(100, 100).drag();
+decorations.push(star);
+
+// Drag and drop logic
+star.on("pressup", () => {
+    if (star.hitTestRect(tree)) {
+        star.loc(tree.x, tree.y - tree.height / 2);
+    } else {
+        star.animate({ x: 100, y: 100 });
+    }
+}); -->
+
+<!-- ////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+<!-- Adding UI Controls
+
+let resetBtn = new zim.Button(120, 40, "Start Over").pos(50, 550);
+resetBtn.on("click", () => {
+    // Reset the game logic
+});
+
+let saveBtn = new zim.Button(120, 40, "Save").pos(200, 550);
+saveBtn.on("click", () => {
+    // Save functionality
+}); -->
+
+<!-- ////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+<!-- Implementing Save Functionality
+
+// Example of a simple save function
+saveBtn.on("click", () => {
+    stage.cache(); // Cache the current stage
+    let dataURL = stage.getCacheDataURL(); // Get the image data URL
+    // Implement saving or sharing of dataURL
+}); -->

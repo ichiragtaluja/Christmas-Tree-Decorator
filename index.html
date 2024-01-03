@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>ZIM - Code Creativity</title>
+
+    <!-- zimjs.com - JavaScript Canvas Framework -->
+    <script type="module">
+      import zim from "https://zimjs.org/cdn/015/zim";
+
+      const path = "assets/";
+      const assets = ["background.png", "roboto.ttf"];
+
+      // See Docs under Frame for FIT, FILL, FULL, and TAG
+      new Frame(FIT, 1024, 768, light, dark, ready, assets, path);
+      function ready() {
+        // given F (Frame), S (Stage), W (width), H (height)
+        // put code here
+        new Label({ text: "DECORATE YOUR TREE", font: "roboto" })
+          .centerReg()
+          .sca(3);
+        new Pic(assets[0]).center().sca().bot();
+
+        new Button({ label: "Decorate", backgroundColor: "green" })
+          .centerReg()
+          .pos(H / 2, W / 2)
+          .drag()
+          .tap(() => {
+            zgo("level1.html");
+          });
+      } // end ready
+    </script>
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+  </head>
+  <body></body>
+</html>
