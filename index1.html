@@ -40,13 +40,14 @@
 
         let ornaments = assets.slice(1, -1);
 
-        // const treeContainer = new Container(300, 400).pos(50, 50).outline();
-
-        // const ornamentsContainer = new Container(100, 100)
-        //   .pos(W - 200, 100)
-        //   .outline();
+        let label = new Label(
+          "Drag and drop all the decorations on the edges of the tree."
+        )
+          .pos(50, 20)
+          .alp(0.5);
 
         const treeBlob = new Blob({
+          color: green.toAlpha(0.01),
           points: [
             [-7, -149.4, 0, 0, -15.1, 33.1, 12.4, 30.9, "free"],
             [48.5, -73.4, 0, 0, 0, 0, 0, 0, "none"],
@@ -72,23 +73,22 @@
           showControles: false,
           onTop: false,
         })
-          .sca(1.4)
-          .centerReg();
+          .sca(1.95)
+          .loc(300, 480);
+        // .centerReg();
 
         const tree = new Pic("tree.png")
           .top()
-          .sca(0.12)
+          .sca(0.15)
           .centerReg()
-          .loc(treeBlob)
-          .outline();
+          .loc(treeBlob);
+        // .outline();
 
         let pics = [];
 
         loop(ornaments, (ornament, i) => {
-          let pic = new Pic(ornaments).sca(0.12).drag();
+          let pic = new Pic(ornaments).sca(0.15).drag();
           pics.push(pic);
-          // label.text = shuffledNumbers[i];
-          // label.alpha = 0;
         });
 
         let ornamentsContainer = new Tile({
@@ -98,41 +98,21 @@
           rows: 4,
           spacingH: 30,
           spacingV: 30,
-        })
-          .pos(W - 330, 100)
-          .outline();
-
-        // loop(ornamentsContainer, (ornament, i) => {
-        //   ornament.drag = true;
-        // });
+          // backgroundColor: white,
+          backdropColor: black,
+        }).pos(W - 370, 100);
+        // .outline();
 
         loop(ornamentsContainer, (ornament, i) => {
-          // zogr(i, ornament);
-          // ornament.on("mousedown", (e) => {
-          //   zogr(e.target);
-          //   e.target.drag();
-          //   S.update();
           ornament.xCoordinate = ornament.x;
           ornament.yCoordinate = ornament.y;
         });
         // });
 
-        // ornamentsContainer.tap((e) => {
-        //   e.target.on("pressup", (i) => {
-        //     zogr(i.target);
-
-        //     if (i.target.hitTestBounds(treeBlob)) {
-        //       zogr("touched");
-        //       S.update();
-        //     }
-        //     // e.target.drag();
-        //   });
-        // });
-
         ornamentsContainer.on("pressup", (e) => {
           zogr(e.target);
 
-          if (e.target.hitTestBounds(treeBlob)) {
+          if (e.target.hitTestPath(treeBlob)) {
             zogr("touched");
             e.target.loc(e.target.x, e.target.y).top().ord(2);
             S.update();
@@ -142,123 +122,25 @@
           }
           // e.target.drag();
         });
-
-        //   .loc(tree);
-
-        // const tree = new Pic("tree.png").top().sca(0.1).centerReg().outline();
+        const loader = new Loader();
+        const button = new Button({ label: "Save", backgroundColor: black })
+          .sca(0.7)
+          .pos(50, 50, RIGHT, BOTTOM)
+          .tap(() => {
+            button.removeFrom();
+            label.removeFrom();
+            zogr(ornamentsContainer.backdrop.alpha);
+            ornamentsContainer.backdrop.alpha = 0;
+            loader.save();
+            button.addTo();
+            label.addTo();
+            zogr(ornamentsContainer.backdrop.alpha);
+            ornamentsContainer.backdrop.alpha = 1;
+            S.update();
+          });
       } // end ready
     </script>
     <meta name="viewport" content="width=device-width, user-scalable=no" />
   </head>
   <body></body>
 </html>
-
-<!-- // Ensure ZIM is included in your HTML
-zim.ready(() => {
-    // Setup the ZIM Frame
-    const frame = new zim.Frame("fit", 800, 600);
-    frame.on("ready", () => {
-        const stage = frame.stage;
-        const stageW = frame.width;
-        const stageH = frame.height;
-
-        // Create a Christmas Tree
-        const tree = new zim.Rectangle(200, 300, "green").center(stage);
-
-        // Example Decoration
-        const star = new zim.Circle(20, "gold").pos(100, 100);
-        star.drag(); // Making the star draggable
-
-        // Drag and Drop Logic for the star
-        star.on("pressup", () => {
-            if (star.hitTestRect(tree)) {
-                // If the star is dropped on the tree, place it on the tree
-                star.loc(tree.x, tree.y - tree.height / 2);
-            } else {
-                // If not, return it to its original position
-                star.animate({ x: 100, y: 100 });
-            }
-        });
-
-        // Additional decorations and functionalities to be added similarly
-
-        // Save and Share buttons
-        const saveBtn = new zim.Button(150, 50, "Save").pos(50, 550, stage);
-        const shareBtn = new zim.Button(150, 50, "Share").pos(600, 550, stage);
-
-        // Event listeners for buttons...
-    });
-}); -->
-
-<!-- ////////////////////////////////////////////////////////////////////////////////////////////// -->
-
-<!-- Sample Code Snippets
-Setting Up the Canvas
-
-const frame = new zim.Frame("fit", 800, 600, "white");
-frame.on("ready", () => {
-    const stage = frame.stage;
-    let tree; // Placeholder for the tree
-    let decorations = []; // Array to hold decorations
-
-    // Create and add the tree
-    // ...
-
-    // Create decorations
-    // ...
-
-    // Add UI controls
-    // ...
-
-    // Implement saving and sharing functionalities
-    // ...
-}); -->
-
-<!-- ////////////////////////////////////////////////////////////////////////////////////////////// -->
-<!-- 
-Creating the Tree
-
-tree = new zim.Rectangle(200, 300, "green").center(stage);
-// Or, if using an image
-// tree = new zim.Bitmap("path/to/tree/image.png").sca(0.5).center(stage);
-
-//////////////////////////////////////////////////////////////////////////////////////////////
-
-Creating a Decorative Item
-
-let star = new zim.Circle(20, "gold").pos(100, 100).drag();
-decorations.push(star);
-
-// Drag and drop logic
-star.on("pressup", () => {
-    if (star.hitTestRect(tree)) {
-        star.loc(tree.x, tree.y - tree.height / 2);
-    } else {
-        star.animate({ x: 100, y: 100 });
-    }
-}); -->
-
-<!-- ////////////////////////////////////////////////////////////////////////////////////////////// -->
-
-<!-- Adding UI Controls
-
-let resetBtn = new zim.Button(120, 40, "Start Over").pos(50, 550);
-resetBtn.on("click", () => {
-    // Reset the game logic
-});
-
-let saveBtn = new zim.Button(120, 40, "Save").pos(200, 550);
-saveBtn.on("click", () => {
-    // Save functionality
-}); -->
-
-<!-- ////////////////////////////////////////////////////////////////////////////////////////////// -->
-
-<!-- Implementing Save Functionality
-
-// Example of a simple save function
-saveBtn.on("click", () => {
-    stage.cache(); // Cache the current stage
-    let dataURL = stage.getCacheDataURL(); // Get the image data URL
-    // Implement saving or sharing of dataURL
-}); -->

@@ -18,15 +18,15 @@
         // put code here
         new Label({ text: "DECORATE YOUR TREE", font: "roboto" })
           .centerReg()
-          .sca(3);
+          .sca(2);
         new Pic(assets[0]).center().sca().bot();
 
-        new Button({ label: "Decorate", backgroundColor: "green" })
+        new Button({ label: "Decorate", backgroundColor: "black" })
           .centerReg()
           .pos(H / 2, W / 2)
           .drag()
           .tap(() => {
-            zgo("level1.html");
+            zgo("index1.html");
           });
       } // end ready
     </script>
